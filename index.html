@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>数据表格(Excel风格)</title>
+  <title>数据表格</title>
   <style>
     /* 全局重置 */
     * {
@@ -33,38 +33,45 @@
     .header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 20px 30px;
+      padding: 16px 24px; /* 缩小header内边距，减少占位 */
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     
     .header h1 {
-      font-size: 24px;
+      font-size: 22px; /* 缩小标题字号 */
       font-weight: 600;
     }
     
+    .header p {
+      font-size: 12px !important; /* 缩小副标题字号 */
+      margin-top: 6px !important;
+    }
+    
+    /* 搜索+按钮布局极致紧凑化 */
     .controls {
       display: flex;
-      gap: 10px;
+      gap: 8px; /* 缩小元素间距 */
       align-items: center;
     }
     
     .search-box {
-      padding: 8px 12px;
+      padding: 6px 10px; /* 缩小输入框内边距 */
       border: none;
       border-radius: 4px;
-      font-size: 14px;
-      width: 200px;
+      font-size: 13px;
+      width: 180px; /* 缩小输入框宽度 */
     }
     
     .btn {
-      padding: 8px 16px;
+      padding: 6px 12px; /* 缩小按钮内边距 */
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px; /* 缩小按钮字号 */
       transition: all 0.2s;
+      white-space: nowrap; /* 防止按钮文字换行 */
     }
     
     .btn-primary {
@@ -86,14 +93,14 @@
       background: #5a6268;
     }
 
-    /* 统计栏 */
+    /* 统计栏（已认证已移除） */
     .stats {
-      padding: 15px 30px;
+      padding: 12px 24px; /* 缩小内边距 */
       background: #f8f9fa;
       border-bottom: 1px solid #e0e0e0;
       display: flex;
       gap: 30px;
-      font-size: 14px;
+      font-size: 13px; /* 缩小字号 */
       color: #666;
       align-items: center;
     }
@@ -125,12 +132,16 @@
       }
     }
     
-    /* ========== Excel核心样式 ========== */
+    /* ========== Excel核心样式 + 列宽极致收缩优化 ========== */
     table {
       width: 100%;
       border-collapse: collapse;
       font-size: 13px;
+      /* 核心1：列宽自适应内容，不会自动拓宽 */
       table-layout: auto;
+      /* 核心2：表格宽度由内容决定，同时不会小于容器宽度 */
+      width: fit-content;
+      min-width: 100%;
       /* Excel经典全边框 */
       border: 1px solid #999;
     }
@@ -152,8 +163,10 @@
       border: 1px solid #999; /* Excel单元格边框 */
       white-space: nowrap;
       vertical-align: top;
-      min-width: 52px;
-      max-width: 95px;
+      /* 核心3：列宽自适应，最小宽度仅够显示内容，不会过宽 */
+      width: auto;
+      min-width: 60px;
+      max-width: 120px;
       position: relative;
     }
     
@@ -229,8 +242,10 @@
       padding: 5px 3px;
       border: 1px solid #999; /* Excel单元格边框 */
       white-space: nowrap;
-      min-width: 52px;
-      max-width: 95px;
+      /* 核心4：列宽与表头一致，自适应内容 */
+      width: auto;
+      min-width: 60px;
+      max-width: 120px;
       overflow: hidden;
       text-overflow: ellipsis;
       background: #fff;
@@ -241,7 +256,7 @@
       background: #FFF2CC; /* Excel hover浅黄 */
     }
     
-    /* Excel隔行斑马纹（可选，更接近Excel观感） */
+    /* Excel隔行斑马纹 */
     tbody tr:nth-child(even) td {
       background: #F8F8F8;
     }
@@ -331,14 +346,11 @@
       .header {
         flex-direction: column;
         gap: 12px;
-        padding: 15px;
+        padding: 12px 15px;
         align-items: flex-start;
       }
       .header h1 {
         font-size: 18px;
-      }
-      .header p {
-        font-size: 12px;
       }
       .header > div > div {
         flex-wrap: wrap;
@@ -347,22 +359,19 @@
         padding: 6px 12px !important;
         font-size: 12px !important;
       }
+      /* 移动端搜索+按钮一行紧凑布局 */
       .controls {
         width: 100%;
-        flex-direction: column;
+        flex-direction: row;
         gap: 8px;
       }
       .search-box {
-        width: 100%;
+        flex: 1;
+        width: auto;
       }
       .btn {
-        flex: 1;
+        flex: 0 0 auto;
         margin-left: 0 !important;
-      }
-      .controls > div:last-child {
-        display: flex;
-        gap: 8px;
-        width: 100%;
       }
       .table-wrapper {
         max-height: 60vh;
@@ -372,8 +381,9 @@
       }
       th, td {
         padding: 4px 2px;
-        min-width: 42px;
-        max-width: 75px;
+        /* 移动端进一步收缩列宽 */
+        min-width: 50px;
+        max-width: 100px;
       }
       .stats {
         flex-wrap: wrap;
@@ -398,28 +408,27 @@
     <div class="header">
       <div>
         <h1>数据表格(Excel风格)</h1>
-        <p style="margin-top: 8px; font-size: 13px; opacity: 0.9;">
+        <p style="margin-top: 6px; font-size: 12px; opacity: 0.9;">
            数据来源于用户测评反馈，仅供参考
         </p>
-        <div style="margin-top: 12px; display: flex; gap: 10px;">
+        <div style="margin-top: 10px; display: flex; gap: 10px;">
           <a href="https://bycby88.github.io/ZSFK/" target="_blank" 
-             style="display: inline-block; padding: 10px 22px; background: rgba(255,255,255,0.35); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 0 12px rgba(255,255,255,0.25); transition: all 0.25s;" 
+             style="display: inline-block; padding: 8px 18px; background: rgba(255,255,255,0.35); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 13px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 0 12px rgba(255,255,255,0.25); transition: all 0.25s;" 
              onmouseover="this.style.background='rgba(255,255,255,0.5)';this.style.boxShadow='0 0 18px rgba(255,255,255,0.4)';this.style.transform='scale(1.03)'" 
              onmouseout="this.style.background='rgba(255,255,255,0.35)';this.style.boxShadow='0 0 12px rgba(255,255,255,0.25)';this.style.transform='scale(1)'">
-            参与测评(使用浏览器打开) →
+            参与测评 →
           </a>
         </div>
       </div>
       <div class="controls">
-        <input type="text" class="search-box" id="globalSearch" placeholder="全局搜索：姓名/ID/胸围/单价">
-        <button class="btn btn-clear" onclick="clearAllFilters()">🔄 清除全部筛选</button>
+        <input type="text" class="search-box" id="globalSearch" placeholder="全局搜索：姓名/老师ID">
+        <button class="btn btn-clear" onclick="clearAllFilters()">🔄 重置</button>
       </div>
     </div>
 
-    <!-- 统计栏 -->
+    <!-- 统计栏（已认证已移除） -->
     <div class="stats">
       <span>共 <strong id="totalCount">0</strong> 位老师</span>
-      <span>已认证 <strong id="verifiedCount">0</strong> 位</span>
     </div>
     
     <!-- 移动端滑动提示 -->
@@ -456,49 +465,7 @@
                 </div>
               </div>
             </th>
-            <!-- 第3列 好评 -->
-            <th data-field="goodCount">
-              <div class="th-content">
-                <div>好评</div>
-                <div class="filter-btn" onclick="toggleFilterPanel('goodCount')">▼</div>
-              </div>
-              <div class="filter-panel" id="filter-panel-goodCount">
-                <input type="text" placeholder="筛选数值" data-field="goodCount">
-                <div class="filter-actions">
-                  <button onclick="clearFilter('goodCount')">清除</button>
-                  <button class="btn-apply" onclick="applyColumnFilter('goodCount')">确定</button>
-                </div>
-              </div>
-            </th>
-            <!-- 第4列 中评 -->
-            <th data-field="mediumCount">
-              <div class="th-content">
-                <div>中评</div>
-                <div class="filter-btn" onclick="toggleFilterPanel('mediumCount')">▼</div>
-              </div>
-              <div class="filter-panel" id="filter-panel-mediumCount">
-                <input type="text" placeholder="筛选数值" data-field="mediumCount">
-                <div class="filter-actions">
-                  <button onclick="clearFilter('mediumCount')">清除</button>
-                  <button class="btn-apply" onclick="applyColumnFilter('mediumCount')">确定</button>
-                </div>
-              </div>
-            </th>
-            <!-- 第5列 差评 -->
-            <th data-field="badCount">
-              <div class="th-content">
-                <div>差评</div>
-                <div class="filter-btn" onclick="toggleFilterPanel('badCount')">▼</div>
-              </div>
-              <div class="filter-panel" id="filter-panel-badCount">
-                <input type="text" placeholder="筛选数值" data-field="badCount">
-                <div class="filter-actions">
-                  <button onclick="clearFilter('badCount')">清除</button>
-                  <button class="btn-apply" onclick="applyColumnFilter('badCount')">确定</button>
-                </div>
-              </div>
-            </th>
-            <!-- 老师ID -->
+            <!-- 第3列 老师ID（已移到姓名后） -->
             <th data-field="teacher_id">
               <div class="th-content">
                 <div>老师ID</div>
@@ -512,7 +479,49 @@
                 </div>
               </div>
             </th>
-            <!-- 年龄 -->
+            <!-- 第4列 好评 -->
+            <th data-field="goodCount">
+              <div class="th-content">
+                <div>好评</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('goodCount')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-goodCount">
+                <input type="text" placeholder="筛选数值" data-field="goodCount">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('goodCount')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('goodCount')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第5列 中评 -->
+            <th data-field="mediumCount">
+              <div class="th-content">
+                <div>中评</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('mediumCount')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-mediumCount">
+                <input type="text" placeholder="筛选数值" data-field="mediumCount">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('mediumCount')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('mediumCount')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第6列 差评 -->
+            <th data-field="badCount">
+              <div class="th-content">
+                <div>差评</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('badCount')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-badCount">
+                <input type="text" placeholder="筛选数值" data-field="badCount">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('badCount')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('badCount')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第7列 年龄 -->
             <th data-field="age">
               <div class="th-content">
                 <div class="th-label" onclick="sortTable('age')">年龄 <span class="sort-icon">↕</span></div>
@@ -526,7 +535,7 @@
                 </div>
               </div>
             </th>
-            <!-- 身高 -->
+            <!-- 第8列 身高 -->
             <th data-field="height">
               <div class="th-content">
                 <div class="th-label" onclick="sortTable('height')">身高 <span class="sort-icon">↕</span></div>
@@ -540,7 +549,7 @@
                 </div>
               </div>
             </th>
-            <!-- 体重 -->
+            <!-- 第9列 体重 -->
             <th data-field="weight">
               <div class="th-content">
                 <div class="th-label" onclick="sortTable('weight')">体重 <span class="sort-icon">↕</span></div>
@@ -554,7 +563,7 @@
                 </div>
               </div>
             </th>
-            <!-- 单价 -->
+            <!-- 第10列 单价 -->
             <th data-field="price">
               <div class="th-content">
                 <div class="th-label" onclick="sortTable('price')">单价 <span class="sort-icon">↕</span></div>
@@ -568,7 +577,7 @@
                 </div>
               </div>
             </th>
-            <!-- 胸围 -->
+            <!-- 第11列 胸围 -->
             <th data-field="bust">
               <div class="th-content">
                 <div>胸围</div>
@@ -582,7 +591,7 @@
                 </div>
               </div>
             </th>
-            <!-- 颜值 -->
+            <!-- 第12列 颜值 -->
             <th data-field="avgScoreLook">
               <div class="th-content">
                 <div>颜值</div>
@@ -596,7 +605,7 @@
                 </div>
               </div>
             </th>
-            <!-- 胸型 -->
+            <!-- 第13列 胸型 -->
             <th data-field="avgScoreBreast">
               <div class="th-content">
                 <div>胸型</div>
@@ -610,7 +619,7 @@
                 </div>
               </div>
             </th>
-            <!-- 腰腹 -->
+            <!-- 第14列 腰腹 -->
             <th data-field="avgScoreWaist">
               <div class="th-content">
                 <div>腰腹</div>
@@ -624,7 +633,7 @@
                 </div>
               </div>
             </th>
-            <!-- 臀腿 -->
+            <!-- 第15列 臀腿 -->
             <th data-field="avgScoreBodyLower">
               <div class="th-content">
                 <div>臀腿</div>
@@ -638,7 +647,7 @@
                 </div>
               </div>
             </th>
-            <!-- 服务 -->
+            <!-- 第16列 服务 -->
             <th data-field="avgScoreService">
               <div class="th-content">
                 <div>服务</div>
@@ -757,7 +766,6 @@
               totalScoreWaist: 0,
               totalScoreBodyLower: 0,
               totalScoreService: 0,
-              hasSuperReview: false,
             };
           }
 
@@ -769,11 +777,6 @@
           teacherStats[teacherId].totalScoreWaist += Number(record.score_waist || 0);
           teacherStats[teacherId].totalScoreBodyLower += Number(record.score_body_lower || 0);
           teacherStats[teacherId].totalScoreService += Number(record.score_service || 0);
-
-          // 判断本条测评是否为超级测评
-          if (Number(record.is_super_soldier_review || 0) === 1) {
-            teacherStats[teacherId].hasSuperReview = true;
-          }
 
           if (score >= 8.5) {
             teacherStats[teacherId].goodCount += 1;
@@ -792,7 +795,7 @@
           }
         }
 
-        // 转换数组、计算平均分，赋值给原始数据源
+        // 转换数组、计算平均分，赋值给原始数据源（已移除isVerified）
         rawAllData = Object.values(teacherStats).map(stats => ({
           ...stats,
           avgScore: stats.totalScore / stats.count,
@@ -801,8 +804,6 @@
           avgScoreWaist: stats.totalScoreWaist / stats.count,
           avgScoreBodyLower: stats.totalScoreBodyLower / stats.count,
           avgScoreService: stats.totalScoreService / stats.count,
-          // 认证判定：存在超级测评 OR 测评总数大于5
-          isVerified: stats.hasSuperReview || stats.count > 5,
         }));
 
         // 缓存仅存储原始未排序数据
@@ -857,7 +858,6 @@
               totalScoreWaist: 0,
               totalScoreBodyLower: 0,
               totalScoreService: 0,
-              hasSuperReview: false,
             };
           }
           const score = Number(record.final_score || 0);
@@ -868,10 +868,6 @@
           teacherStats[teacherId].totalScoreWaist += Number(record.score_waist || 0);
           teacherStats[teacherId].totalScoreBodyLower += Number(record.score_body_lower || 0);
           teacherStats[teacherId].totalScoreService += Number(record.score_service || 0);
-          // 超级测评标记
-          if (Number(record.is_super_soldier_review || 0) === 1) {
-            teacherStats[teacherId].hasSuperReview = true;
-          }
           if (score >= 8.5) teacherStats[teacherId].goodCount +=1;
           else if(score>=6) teacherStats[teacherId].mediumCount +=1;
           else teacherStats[teacherId].badCount +=1;
@@ -889,7 +885,6 @@
           avgScoreWaist: stats.totalScoreWaist / stats.count,
           avgScoreBodyLower: stats.totalScoreBodyLower / stats.count,
           avgScoreService: stats.totalScoreService / stats.count,
-          isVerified: stats.hasSuperReview || stats.count > 5,
         }));
         // 更新缓存原始数据
         rawAllData = newRaw;
@@ -908,13 +903,14 @@
       data.forEach((teacher) => {
         const row = document.createElement('tr');
         
+        // 列顺序和HTMLthead完全对应：综合评分、姓名、老师ID、好评、中评、差评...
         row.innerHTML = `
           <td class="${teacher.avgScore >= 8.5 ? 'score-high' : teacher.avgScore >= 6 ? 'score-medium' : 'score-low'}"><strong>${teacher.avgScore.toFixed(2)}</strong></td>
           <td><strong>${teacher.teacher_name}</strong></td>
+          <td style="font-family: monospace; font-size: 12px;">${teacher.teacher_id}</td>
           <td class="score-high">${teacher.goodCount}</td>
           <td class="score-medium">${teacher.mediumCount}</td>
           <td class="score-low">${teacher.badCount}</td>
-          <td style="font-family: monospace; font-size: 12px;">${teacher.teacher_id}</td>
           <td>${teacher.age}</td>
           <td>${teacher.height}cm</td>
           <td>${teacher.weight}kg</td>
@@ -930,9 +926,8 @@
         tbody.appendChild(row);
       });
       
+      // 仅保留总人数统计（已认证已移除）
       document.getElementById('totalCount').textContent = data.length;
-      // 统计已认证人数：isVerified=true 的老师数量
-      document.getElementById('verifiedCount').textContent = data.filter(t => t.isVerified).length;
     }
 
     // ========== 核心筛选逻辑（Excel风格） ==========
@@ -941,14 +936,12 @@
       let sortedBase = [...rawAllData].sort(sortCompareFunc);
       let filtered = [...sortedBase];
       
-      // 1. 全局搜索：姓名、ID、胸围bust、单价price全部模糊匹配
+      // 1. 全局搜索：仅保留姓名、老师ID匹配（已移除胸围/单价）
       if (globalSearchTerm) {
         const term = globalSearchTerm.toLowerCase();
         filtered = filtered.filter(t =>
           t.teacher_name.toLowerCase().includes(term) ||
-          t.teacher_id.toLowerCase().includes(term) ||
-          String(t.bust).toLowerCase().includes(term) ||
-          String(t.price).toLowerCase().includes(term)
+          t.teacher_id.toLowerCase().includes(term)
         );
       }
 

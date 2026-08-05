@@ -437,10 +437,10 @@
       <table id="dataTable">
         <thead>
           <tr>
-            <!-- 第1列 综合评分 -->
+            <!-- 第1列 综合 -->
             <th data-field="avgScore">
               <div class="th-content">
-                <div class="th-label sort-active" onclick="sortTable('avgScore')">综合评分 <span class="sort-icon">↓</span></div>
+                <div class="th-label sort-active" onclick="sortTable('avgScore')">综合 <span class="sort-icon">↓</span></div>
                 <div class="filter-btn" onclick="toggleFilterPanel('avgScore')">▼</div>
               </div>
               <div class="filter-panel" id="filter-panel-avgScore">
@@ -903,7 +903,7 @@
       data.forEach((teacher) => {
         const row = document.createElement('tr');
         
-        // 列顺序和HTMLthead完全对应：综合评分、姓名、老师ID、好评、中评、差评...
+        // 列顺序和HTMLthead完全对应：综合、姓名、老师ID、好评、中评、差评...
         row.innerHTML = `
           <td class="${teacher.avgScore >= 8.5 ? 'score-high' : teacher.avgScore >= 6 ? 'score-medium' : 'score-low'}"><strong>${teacher.avgScore.toFixed(2)}</strong></td>
           <td><strong>${teacher.teacher_name}</strong></td>

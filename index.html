@@ -6,7 +6,7 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>数据表格</title>
+  <title>数据表格(Excel风格)</title>
   <style>
     /* 全局重置 */
     * {
@@ -33,45 +33,45 @@
     .header {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
-      padding: 16px 24px; /* 缩小header内边距，减少占位 */
+      padding: 16px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
     
     .header h1 {
-      font-size: 22px; /* 缩小标题字号 */
+      font-size: 20px; /* 缩小标题字号 */
       font-weight: 600;
     }
     
     .header p {
-      font-size: 12px !important; /* 缩小副标题字号 */
+      font-size: 12px !important;
       margin-top: 6px !important;
     }
     
     /* 搜索+按钮布局极致紧凑化 */
     .controls {
       display: flex;
-      gap: 8px; /* 缩小元素间距 */
+      gap: 8px;
       align-items: center;
     }
     
     .search-box {
-      padding: 6px 10px; /* 缩小输入框内边距 */
+      padding: 6px 10px;
       border: none;
       border-radius: 4px;
-      font-size: 13px;
-      width: 180px; /* 缩小输入框宽度 */
+      font-size: 12px; /* 缩小搜索框字号 */
+      width: 160px; /* 缩小搜索框宽度 */
     }
     
     .btn {
-      padding: 6px 12px; /* 缩小按钮内边距 */
+      padding: 6px 12px;
       border: none;
       border-radius: 4px;
       cursor: pointer;
-      font-size: 13px; /* 缩小按钮字号 */
+      font-size: 12px; /* 缩小按钮字号 */
       transition: all 0.2s;
-      white-space: nowrap; /* 防止按钮文字换行 */
+      white-space: nowrap;
     }
     
     .btn-primary {
@@ -93,14 +93,14 @@
       background: #5a6268;
     }
 
-    /* 统计栏（已认证已移除） */
+    /* 统计栏 */
     .stats {
-      padding: 12px 24px; /* 缩小内边距 */
+      padding: 12px 24px;
       background: #f8f9fa;
       border-bottom: 1px solid #e0e0e0;
       display: flex;
       gap: 30px;
-      font-size: 13px; /* 缩小字号 */
+      font-size: 12px; /* 缩小字号 */
       color: #666;
       align-items: center;
     }
@@ -123,7 +123,7 @@
       text-align: center;
       padding: 8px;
       color: #888;
-      font-size: 13px;
+      font-size: 12px;
       background: #fff8e1;
     }
     @media (max-width:768px) {
@@ -132,14 +132,15 @@
       }
     }
     
-    /* ========== Excel核心样式 + 列宽极致收缩优化 ========== */
+    /* ========== Excel核心样式 + 字体缩小优化 ========== */
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
-      /* 核心1：列宽自适应内容，不会自动拓宽 */
+      /* 核心1：全表格字体缩小，展示更多内容 */
+      font-size: 12px;
+      /* 核心2：列宽自适应内容，不会自动拓宽 */
       table-layout: auto;
-      /* 核心2：表格宽度由内容决定，同时不会小于容器宽度 */
+      /* 核心3：表格宽度由内容决定，同时不会小于容器宽度 */
       width: fit-content;
       min-width: 100%;
       /* Excel经典全边框 */
@@ -156,18 +157,28 @@
     /* Excel表头样式 */
     th {
       background: #D3EAFD; /* Excel经典浅蓝表头 */
-      padding: 6px 3px;
+      padding: 5px 3px; /* 缩小内边距，更紧凑 */
       text-align: left;
       font-weight: 600;
       color: #000;
       border: 1px solid #999; /* Excel单元格边框 */
       white-space: nowrap;
       vertical-align: top;
-      /* 核心3：列宽自适应，最小宽度仅够显示内容，不会过宽 */
+      /* 核心4：列宽自适应，最小宽度紧凑化 */
       width: auto;
-      min-width: 60px;
-      max-width: 120px;
+      min-width: 54px;
+      max-width: 110px;
       position: relative;
+    }
+    
+    /* 老师ID列单独加宽，确保ID完整显示 */
+    th[data-field="teacher_id"] {
+      min-width: 90px !important;
+      max-width: 120px !important;
+    }
+    td[data-field="teacher_id"] {
+      min-width: 90px !important;
+      max-width: 120px !important;
     }
     
     /* Excel表头内容布局：标签+排序箭头+筛选按钮 */
@@ -197,7 +208,7 @@
     /* Excel排序箭头 */
     .sort-icon {
       display: inline-block;
-      font-size: 12px;
+      font-size: 11px; /* 缩小排序箭头字号 */
       opacity: 0.3;
       transition: all 0.2s;
     }
@@ -216,13 +227,13 @@
     
     /* Excel筛选按钮（下拉箭头） */
     .filter-btn {
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 10px;
+      font-size: 9px; /* 缩小筛选按钮字号 */
       color: #666;
       border-radius: 2px;
       transition: background 0.2s;
@@ -239,13 +250,13 @@
     
     /* Excel单元格样式 */
     td {
-      padding: 5px 3px;
+      padding: 4px 3px; /* 缩小单元格内边距，更紧凑 */
       border: 1px solid #999; /* Excel单元格边框 */
       white-space: nowrap;
-      /* 核心4：列宽与表头一致，自适应内容 */
+      /* 核心5：列宽与表头一致，自适应内容 */
       width: auto;
-      min-width: 60px;
-      max-width: 120px;
+      min-width: 54px;
+      max-width: 110px;
       overflow: hidden;
       text-overflow: ellipsis;
       background: #fff;
@@ -308,7 +319,7 @@
       border: 1px solid #ccc;
       border-radius: 4px;
       margin-bottom: 8px;
-      font-size: 13px;
+      font-size: 12px; /* 缩小输入框字号 */
     }
     .filter-panel .filter-actions {
       display: flex;
@@ -377,13 +388,19 @@
         max-height: 60vh;
       }
       table {
-        font-size: 11px;
+        font-size: 11px; /* 移动端进一步缩小字体 */
       }
       th, td {
-        padding: 4px 2px;
-        /* 移动端进一步收缩列宽 */
-        min-width: 50px;
-        max-width: 100px;
+        padding: 3px 2px; /* 移动端进一步缩小内边距 */
+        min-width: 48px;
+        max-width: 90px;
+      }
+      /* 移动端ID列同样加宽 */
+      th[data-field="teacher_id"] {
+        min-width: 80px !important;
+      }
+      td[data-field="teacher_id"] {
+        min-width: 80px !important;
       }
       .stats {
         flex-wrap: wrap;
@@ -426,7 +443,7 @@
       </div>
     </div>
 
-    <!-- 统计栏（已认证已移除） -->
+    <!-- 统计栏 -->
     <div class="stats">
       <span>共 <strong id="totalCount">0</strong> 位老师</span>
     </div>
@@ -437,10 +454,10 @@
       <table id="dataTable">
         <thead>
           <tr>
-            <!-- 第1列 综合 -->
+            <!-- 第1列 综合评分 -->
             <th data-field="avgScore">
               <div class="th-content">
-                <div class="th-label sort-active" onclick="sortTable('avgScore')">综合 <span class="sort-icon">↓</span></div>
+                <div class="th-label sort-active" onclick="sortTable('avgScore')">综合评分 <span class="sort-icon">↓</span></div>
                 <div class="filter-btn" onclick="toggleFilterPanel('avgScore')">▼</div>
               </div>
               <div class="filter-panel" id="filter-panel-avgScore">
@@ -465,7 +482,7 @@
                 </div>
               </div>
             </th>
-            <!-- 第3列 老师ID（已移到姓名后） -->
+            <!-- 第3列 老师ID -->
             <th data-field="teacher_id">
               <div class="th-content">
                 <div>老师ID</div>
@@ -521,49 +538,7 @@
                 </div>
               </div>
             </th>
-            <!-- 第7列 年龄 -->
-            <th data-field="age">
-              <div class="th-content">
-                <div class="th-label" onclick="sortTable('age')">年龄 <span class="sort-icon">↕</span></div>
-                <div class="filter-btn" onclick="toggleFilterPanel('age')">▼</div>
-              </div>
-              <div class="filter-panel" id="filter-panel-age">
-                <input type="text" placeholder="筛选年龄" data-field="age">
-                <div class="filter-actions">
-                  <button onclick="clearFilter('age')">清除</button>
-                  <button class="btn-apply" onclick="applyColumnFilter('age')">确定</button>
-                </div>
-              </div>
-            </th>
-            <!-- 第8列 身高 -->
-            <th data-field="height">
-              <div class="th-content">
-                <div class="th-label" onclick="sortTable('height')">身高 <span class="sort-icon">↕</span></div>
-                <div class="filter-btn" onclick="toggleFilterPanel('height')">▼</div>
-              </div>
-              <div class="filter-panel" id="filter-panel-height">
-                <input type="text" placeholder="筛选身高" data-field="height">
-                <div class="filter-actions">
-                  <button onclick="clearFilter('height')">清除</button>
-                  <button class="btn-apply" onclick="applyColumnFilter('height')">确定</button>
-                </div>
-              </div>
-            </th>
-            <!-- 第9列 体重 -->
-            <th data-field="weight">
-              <div class="th-content">
-                <div class="th-label" onclick="sortTable('weight')">体重 <span class="sort-icon">↕</span></div>
-                <div class="filter-btn" onclick="toggleFilterPanel('weight')">▼</div>
-              </div>
-              <div class="filter-panel" id="filter-panel-weight">
-                <input type="text" placeholder="筛选体重" data-field="weight">
-                <div class="filter-actions">
-                  <button onclick="clearFilter('weight')">清除</button>
-                  <button class="btn-apply" onclick="applyColumnFilter('weight')">确定</button>
-                </div>
-              </div>
-            </th>
-            <!-- 第10列 单价 -->
+            <!-- 第7列 单价（已移到差评后） -->
             <th data-field="price">
               <div class="th-content">
                 <div class="th-label" onclick="sortTable('price')">单价 <span class="sort-icon">↕</span></div>
@@ -577,7 +552,7 @@
                 </div>
               </div>
             </th>
-            <!-- 第11列 胸围 -->
+            <!-- 第8列 胸围（已移到差评后） -->
             <th data-field="bust">
               <div class="th-content">
                 <div>胸围</div>
@@ -588,6 +563,48 @@
                 <div class="filter-actions">
                   <button onclick="clearFilter('bust')">清除</button>
                   <button class="btn-apply" onclick="applyColumnFilter('bust')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第9列 年龄 -->
+            <th data-field="age">
+              <div class="th-content">
+                <div class="th-label" onclick="sortTable('age')">年龄 <span class="sort-icon">↕</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('age')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-age">
+                <input type="text" placeholder="筛选年龄" data-field="age">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('age')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('age')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第10列 身高 -->
+            <th data-field="height">
+              <div class="th-content">
+                <div class="th-label" onclick="sortTable('height')">身高 <span class="sort-icon">↕</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('height')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-height">
+                <input type="text" placeholder="筛选身高" data-field="height">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('height')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('height')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第11列 体重 -->
+            <th data-field="weight">
+              <div class="th-content">
+                <div class="th-label" onclick="sortTable('weight')">体重 <span class="sort-icon">↕</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('weight')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-weight">
+                <input type="text" placeholder="筛选体重" data-field="weight">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('weight')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('weight')">确定</button>
                 </div>
               </div>
             </th>
@@ -795,7 +812,7 @@
           }
         }
 
-        // 转换数组、计算平均分，赋值给原始数据源（已移除isVerified）
+        // 转换数组、计算平均分，赋值给原始数据源
         rawAllData = Object.values(teacherStats).map(stats => ({
           ...stats,
           avgScore: stats.totalScore / stats.count,
@@ -903,19 +920,19 @@
       data.forEach((teacher) => {
         const row = document.createElement('tr');
         
-        // 列顺序和HTMLthead完全对应：综合、姓名、老师ID、好评、中评、差评...
+        // 列顺序和HTMLthead完全对应：综合评分、姓名、老师ID、好评、中评、差评、单价、胸围、年龄、身高、体重、颜值、胸型、腰腹、臀腿、服务
         row.innerHTML = `
           <td class="${teacher.avgScore >= 8.5 ? 'score-high' : teacher.avgScore >= 6 ? 'score-medium' : 'score-low'}"><strong>${teacher.avgScore.toFixed(2)}</strong></td>
           <td><strong>${teacher.teacher_name}</strong></td>
-          <td style="font-family: monospace; font-size: 12px;">${teacher.teacher_id}</td>
+          <td data-field="teacher_id" style="font-family: monospace; font-size: 12px;">${teacher.teacher_id}</td>
           <td class="score-high">${teacher.goodCount}</td>
           <td class="score-medium">${teacher.mediumCount}</td>
           <td class="score-low">${teacher.badCount}</td>
+          <td>${teacher.price}档</td>
+          <td>${teacher.bust}</td>
           <td>${teacher.age}</td>
           <td>${teacher.height}cm</td>
           <td>${teacher.weight}kg</td>
-          <td>${teacher.price}档</td>
-          <td>${teacher.bust}</td>
           <td>${teacher.avgScoreLook.toFixed(1)}</td>
           <td>${teacher.avgScoreBreast.toFixed(1)}</td>
           <td>${teacher.avgScoreWaist.toFixed(1)}</td>
@@ -926,7 +943,7 @@
         tbody.appendChild(row);
       });
       
-      // 仅保留总人数统计（已认证已移除）
+      // 仅保留总人数统计
       document.getElementById('totalCount').textContent = data.length;
     }
 
@@ -936,7 +953,7 @@
       let sortedBase = [...rawAllData].sort(sortCompareFunc);
       let filtered = [...sortedBase];
       
-      // 1. 全局搜索：仅保留姓名、老师ID匹配（已移除胸围/单价）
+      // 1. 全局搜索：仅保留姓名、老师ID匹配
       if (globalSearchTerm) {
         const term = globalSearchTerm.toLowerCase();
         filtered = filtered.filter(t =>

@@ -1,71 +1,1104 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>服务已停止</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: #f5f7fa;
-            color: #333;
-            display: flex;
-            min-height: 100vh;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .container {
-            background: #fff;
-            padding: 48px 36px;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-            text-align: center;
-            max-width: 480px;
-            width: 100%;
-        }
-        h1 {
-            font-size: 24px;
-            color: #d32f2f;
-            margin-bottom: 16px;
-        }
-        .desc {
-            font-size: 16px;
-            color: #555;
-            margin-bottom: 24px;
-            line-height: 1.6;
-        }
-        .link-box {
-            word-break: break-all;
-        }
-        a {
-            display: inline-block;
-            color: #1976d2;
-            font-size: 16px;
-            text-decoration: none;
-            border: 1px solid #1976d2;
-            padding: 12px 24px;
-            border-radius: 8px;
-            transition: 0.2s;
-        }
-        a:hover {
-            background-color: #1976d2;
-            color: #fff;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>数据表格(Excel风格)</title>
+  <style>
+    /* 全局重置 */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .header h1 {
+      font-size: 24px;
+      font-weight: 600;
+    }
+    
+    .controls {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    
+    .search-box {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      width: 200px;
+    }
+    
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    
+    .btn-primary {
+      background: white;
+      color: #667eea;
+      font-weight: 500;
+    }
+    
+    .btn-primary:hover {
+      background: #f0f0f0;
+    }
+    
+    .btn-clear {
+      background: #6c757d;
+      color: white;
+    }
+    
+    .btn-clear:hover {
+      background: #5a6268;
+    }
+
+    /* 统计栏 */
+    .stats {
+      padding: 15px 30px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      gap: 30px;
+      font-size: 14px;
+      color: #666;
+      align-items: center;
+    }
+    
+    .stats strong {
+      color: #333;
+    }
+    
+    /* 表格外层容器 */
+    .table-wrapper {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      max-height: 70vh;
+      position: relative;
+    }
+    
+    /* 移动端滑动提示 */
+    .scroll-tip {
+      display: none;
+      text-align: center;
+      padding: 8px;
+      color: #888;
+      font-size: 13px;
+      background: #fff8e1;
+    }
+    @media (max-width:768px) {
+      .scroll-tip {
+        display: block;
+      }
+    }
+    
+    /* ========== Excel核心样式 ========== */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      table-layout: auto;
+      /* Excel经典全边框 */
+      border: 1px solid #999;
+    }
+    
+    /* 表头固定（Excel冻结首行） */
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    
+    /* Excel表头样式 */
+    th {
+      background: #D3EAFD; /* Excel经典浅蓝表头 */
+      padding: 6px 3px;
+      text-align: left;
+      font-weight: 600;
+      color: #000;
+      border: 1px solid #999; /* Excel单元格边框 */
+      white-space: nowrap;
+      vertical-align: top;
+      min-width: 52px;
+      max-width: 95px;
+      position: relative;
+    }
+    
+    /* Excel表头内容布局：标签+排序箭头+筛选按钮 */
+    .th-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      position: relative;
+      width: 100%;
+    }
+    
+    /* Excel排序标签 */
+    .th-label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      user-select: none;
+      flex: 1;
+    }
+    
+    .th-label:hover {
+      color: #000;
+    }
+    
+    /* Excel排序箭头 */
+    .sort-icon {
+      display: inline-block;
+      font-size: 12px;
+      opacity: 0.3;
+      transition: all 0.2s;
+    }
+    .th-label:hover .sort-icon {
+      opacity: 0.7;
+    }
+    .sort-active .sort-icon {
+      opacity: 1;
+      color: #000;
+      font-weight: bold;
+    }
+    .sort-active {
+      color: #000;
+      font-weight: 600;
+    }
+    
+    /* Excel筛选按钮（下拉箭头） */
+    .filter-btn {
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 10px;
+      color: #666;
+      border-radius: 2px;
+      transition: background 0.2s;
+    }
+    .filter-btn:hover {
+      background: #fff;
+      border: 1px solid #ccc;
+    }
+    /* 筛选激活状态（有筛选条件时高亮） */
+    .filter-btn.active {
+      background: #FFC000;
+      color: #000;
+    }
+    
+    /* Excel单元格样式 */
+    td {
+      padding: 5px 3px;
+      border: 1px solid #999; /* Excel单元格边框 */
+      white-space: nowrap;
+      min-width: 52px;
+      max-width: 95px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      background: #fff;
+    }
+    
+    /* Excel行hover效果 */
+    tbody tr:hover td {
+      background: #FFF2CC; /* Excel hover浅黄 */
+    }
+    
+    /* Excel隔行斑马纹（可选，更接近Excel观感） */
+    tbody tr:nth-child(even) td {
+      background: #F8F8F8;
+    }
+    tbody tr:nth-child(even):hover td {
+      background: #FFF2CC;
+    }
+    
+    /* 评分颜色保留 */
+    .score-high {
+      color: #28a745;
+      font-weight: 600;
+    }
+    .score-medium {
+      color: #ffc107;
+      font-weight: 600;
+    }
+    .score-low {
+      color: #dc3545;
+      font-weight: 600;
+    }
+    
+    /* 加载状态 */
+    .loading-text{
+      text-align:center;padding:40px;color:#666;
+    }
+    .reload-btn{
+      margin-top:12px;padding:6px 16px;
+    }
+    
+    /* ========== Excel筛选面板 ========== */
+    .filter-panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      background: #fff;
+      border: 1px solid #999;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+      padding: 8px;
+      z-index: 100;
+      min-width: 200px;
+      display: none;
+    }
+    .filter-panel.show {
+      display: block;
+    }
+    .filter-panel input {
+      width: 100%;
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .filter-panel .filter-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    .filter-panel button {
+      padding: 4px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #f0f0f0;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .filter-panel button:hover {
+      background: #e0e0e0;
+    }
+    .filter-panel .btn-apply {
+      background: #0078D4;
+      color: #fff;
+      border-color: #0078D4;
+    }
+    .filter-panel .btn-apply:hover {
+      background: #005A9E;
+    }
+    
+    /* ========== 移动端适配 ========== */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+      .container {
+        border-radius: 4px;
+      }
+      .header {
+        flex-direction: column;
+        gap: 12px;
+        padding: 15px;
+        align-items: flex-start;
+      }
+      .header h1 {
+        font-size: 18px;
+      }
+      .header p {
+        font-size: 12px;
+      }
+      .header > div > div {
+        flex-wrap: wrap;
+      }
+      .header a {
+        padding: 6px 12px !important;
+        font-size: 12px !important;
+      }
+      .controls {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .search-box {
+        width: 100%;
+      }
+      .btn {
+        flex: 1;
+        margin-left: 0 !important;
+      }
+      .controls > div:last-child {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+      }
+      .table-wrapper {
+        max-height: 60vh;
+      }
+      table {
+        font-size: 11px;
+      }
+      th, td {
+        padding: 4px 2px;
+        min-width: 42px;
+        max-width: 75px;
+      }
+      .stats {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 15px;
+        font-size: 12px;
+      }
+      /* 移动端筛选面板全屏 */
+      .filter-panel {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 300px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>该服务因意外已停止</h1>
-        <p class="desc">请访问新项目页面获取最新内容</p>
-        <div class="link-box">
-            <a href="https://bycby88.github.io/mi/" target="_blank">https://bycby88.github.io/mi/</a>
+  <div class="container">
+    <div class="header">
+      <div>
+        <h1>数据表格(Excel风格)</h1>
+        <p style="margin-top: 8px; font-size: 13px; opacity: 0.9;">
+           数据来源于用户测评反馈，仅供参考
+        </p>
+        <div style="margin-top: 12px; display: flex; gap: 10px;">
+          <a href="https://bycby88.github.io/ZSFK/" target="_blank" 
+             style="display: inline-block; padding: 10px 22px; background: rgba(255,255,255,0.35); color: #ffffff; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 0 12px rgba(255,255,255,0.25); transition: all 0.25s;" 
+             onmouseover="this.style.background='rgba(255,255,255,0.5)';this.style.boxShadow='0 0 18px rgba(255,255,255,0.4)';this.style.transform='scale(1.03)'" 
+             onmouseout="this.style.background='rgba(255,255,255,0.35)';this.style.boxShadow='0 0 12px rgba(255,255,255,0.25)';this.style.transform='scale(1)'">
+            参与测评(使用浏览器打开) →
+          </a>
         </div>
+      </div>
+      <div class="controls">
+        <input type="text" class="search-box" id="globalSearch" placeholder="全局搜索：姓名/ID/胸围/单价">
+        <button class="btn btn-clear" onclick="clearAllFilters()">🔄 清除全部筛选</button>
+      </div>
     </div>
+
+    <!-- 统计栏 -->
+    <div class="stats">
+      <span>共 <strong id="totalCount">0</strong> 位老师</span>
+      <span>已认证 <strong id="verifiedCount">0</strong> 位</span>
+    </div>
+    
+    <!-- 移动端滑动提示 -->
+    <div class="scroll-tip">← 左右滑动表格查看更多列 →</div>
+    <div class="table-wrapper">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <!-- 第1列 综合评分 -->
+            <th data-field="avgScore">
+              <div class="th-content">
+                <div class="th-label sort-active" onclick="sortTable('avgScore')">综合评分 <span class="sort-icon">↓</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('avgScore')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-avgScore">
+                <input type="text" placeholder="筛选数值（如 8-10）" data-field="avgScore">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('avgScore')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('avgScore')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第2列 姓名 -->
+            <th data-field="name">
+              <div class="th-content">
+                <div class="th-label" onclick="sortTable('name')">姓名 <span class="sort-icon">↕</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('name')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-name">
+                <input type="text" placeholder="筛选文字" data-field="name">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('name')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('name')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第3列 好评 -->
+            <th data-field="goodCount">
+              <div class="th-content">
+                <div>好评</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('goodCount')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-goodCount">
+                <input type="text" placeholder="筛选数值" data-field="goodCount">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('goodCount')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('goodCount')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第4列 中评 -->
+            <th data-field="mediumCount">
+              <div class="th-content">
+                <div>中评</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('mediumCount')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-mediumCount">
+                <input type="text" placeholder="筛选数值" data-field="mediumCount">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('mediumCount')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('mediumCount')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 第5列 差评 -->
+            <th data-field="badCount">
+              <div class="th-content">
+                <div>差评</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('badCount')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-badCount">
+                <input type="text" placeholder="筛选数值" data-field="badCount">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('badCount')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('badCount')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 老师ID -->
+            <th data-field="teacher_id">
+              <div class="th-content">
+                <div>老师ID</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('teacher_id')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-teacher_id">
+                <input type="text" placeholder="筛选ID" data-field="teacher_id">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('teacher_id')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('teacher_id')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 年龄 -->
+            <th data-field="age">
+              <div class="th-content">
+                <div class="th-label" onclick="sortTable('age')">年龄 <span class="sort-icon">↕</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('age')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-age">
+                <input type="text" placeholder="筛选年龄" data-field="age">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('age')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('age')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 身高 -->
+            <th data-field="height">
+              <div class="th-content">
+                <div class="th-label" onclick="sortTable('height')">身高 <span class="sort-icon">↕</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('height')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-height">
+                <input type="text" placeholder="筛选身高" data-field="height">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('height')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('height')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 体重 -->
+            <th data-field="weight">
+              <div class="th-content">
+                <div class="th-label" onclick="sortTable('weight')">体重 <span class="sort-icon">↕</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('weight')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-weight">
+                <input type="text" placeholder="筛选体重" data-field="weight">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('weight')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('weight')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 单价 -->
+            <th data-field="price">
+              <div class="th-content">
+                <div class="th-label" onclick="sortTable('price')">单价 <span class="sort-icon">↕</span></div>
+                <div class="filter-btn" onclick="toggleFilterPanel('price')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-price">
+                <input type="text" placeholder="筛选单价（如 3-10）" data-field="price">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('price')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('price')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 胸围 -->
+            <th data-field="bust">
+              <div class="th-content">
+                <div>胸围</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('bust')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-bust">
+                <input type="text" placeholder="筛选胸围" data-field="bust">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('bust')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('bust')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 颜值 -->
+            <th data-field="avgScoreLook">
+              <div class="th-content">
+                <div>颜值</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('avgScoreLook')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-avgScoreLook">
+                <input type="text" placeholder="筛选颜值评分" data-field="avgScoreLook">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('avgScoreLook')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('avgScoreLook')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 胸型 -->
+            <th data-field="avgScoreBreast">
+              <div class="th-content">
+                <div>胸型</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('avgScoreBreast')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-avgScoreBreast">
+                <input type="text" placeholder="筛选胸型评分" data-field="avgScoreBreast">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('avgScoreBreast')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('avgScoreBreast')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 腰腹 -->
+            <th data-field="avgScoreWaist">
+              <div class="th-content">
+                <div>腰腹</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('avgScoreWaist')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-avgScoreWaist">
+                <input type="text" placeholder="筛选腰腹评分" data-field="avgScoreWaist">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('avgScoreWaist')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('avgScoreWaist')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 臀腿 -->
+            <th data-field="avgScoreBodyLower">
+              <div class="th-content">
+                <div>臀腿</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('avgScoreBodyLower')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-avgScoreBodyLower">
+                <input type="text" placeholder="筛选臀腿评分" data-field="avgScoreBodyLower">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('avgScoreBodyLower')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('avgScoreBodyLower')">确定</button>
+                </div>
+              </div>
+            </th>
+            <!-- 服务 -->
+            <th data-field="avgScoreService">
+              <div class="th-content">
+                <div>服务</div>
+                <div class="filter-btn" onclick="toggleFilterPanel('avgScoreService')">▼</div>
+              </div>
+              <div class="filter-panel" id="filter-panel-avgScoreService">
+                <input type="text" placeholder="筛选服务评分" data-field="avgScoreService">
+                <div class="filter-actions">
+                  <button onclick="clearFilter('avgScoreService')">清除</button>
+                  <button class="btn-apply" onclick="applyColumnFilter('avgScoreService')">确定</button>
+                </div>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr><td colspan="16" class="loading-text">正在加载数据……</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script>
+    // Cloudflare Workers API 配置
+    const API_URL = 'https://api.byg88.biz';
+    // 【核心拆分】rawAllData：原始全量数据（仅存入缓存，不排序不筛选）
+    let rawAllData = [];
+    // currentData：仅用于渲染的临时数组，不写入缓存
+    let currentData = [];
+    let sortField = 'avgScore';
+    let sortDirection = 'desc';
+    let filters = {}; // 列筛选条件
+    let globalSearchTerm = '';
+    let hasRetried = false;
+
+    // 缓存key：只存储原始未排序数据
+    const CACHE_RAW_KEY = 'teacher_raw_all_data';
+    const CACHE_TIME_KEY = 'teacher_table_cache_time_cf';
+    const CACHE_DURATION = 30 * 60 * 1000; // 30分钟
+
+    // 带超时的fetch封装
+    function fetchWithTimeout(url, timeout = 8000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeout);
+      return fetch(url, { signal: controller.signal })
+        .finally(() => clearTimeout(id));
+    }
+
+    // 统一通用排序对比函数（所有排序复用，基于全局sortField/sortDirection）
+    function sortCompareFunc(a, b) {
+      let valA = a[sortField];
+      let valB = b[sortField];
+      // 判断是否数字类型
+      const numA = parseFloat(valA);
+      const numB = parseFloat(valB);
+      if (!isNaN(numA) && !isNaN(numB)) {
+        valA = numA;
+        valB = numB;
+      }
+      // 升降序判断
+      if (valA > valB) return sortDirection === 'desc' ? -1 : 1;
+      if (valA < valB) return sortDirection === 'desc' ? 1 : -1;
+      return 0;
+    }
+
+    // 从 Cloudflare Workers API 加载数据
+    async function loadData() {
+      const tbody = document.getElementById('tableBody');
+      const now = Date.now();
+      const cachedRaw = localStorage.getItem(CACHE_RAW_KEY);
+      const cacheTime = localStorage.getItem(CACHE_TIME_KEY);
+
+      // 优先读取缓存原始数据
+      if (cachedRaw && cacheTime && (now - parseInt(cacheTime)) < CACHE_DURATION) {
+        rawAllData = JSON.parse(cachedRaw);
+        // 关键：读取原始数据后立刻强制重排，消除缓存旧顺序
+        currentData = [...rawAllData].sort(sortCompareFunc);
+        renderTable(currentData);
+        // 后台静默刷新最新接口数据
+        remoteRefresh();
+        return;
+      }
+
+      try {
+        tbody.innerHTML = '<tr><td colspan="16" class="loading-text">请求远程数据中……</td></tr>';
+        const response = await fetchWithTimeout(`${API_URL}/api/collections/test_records/records?page=1&perPage=1000&sort=-created_at`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const result = await response.json();
+        const records = result.items || [];
+
+        if (records.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="16" style="text-align:center;padding:40px;color:#999;">暂无数据</td></tr>';
+          return;
+        }
+
+        // 按老师ID分组统计
+        const teacherStats = {};
+        for (const record of records) {
+          const teacherId = record.teacher_id;
+          if (!teacherStats[teacherId]) {
+            teacherStats[teacherId] = {
+              teacher_id: teacherId,
+              teacher_name: record.teacher_name,
+              age: record.age,
+              height: record.height,
+              weight: record.weight,
+              price: record.price,
+              bust: record.bust,
+              totalScore: 0,
+              count: 0,
+              goodCount: 0,
+              mediumCount: 0,
+              badCount: 0,
+              features: [],
+              totalScoreLook: 0,
+              totalScoreBreast: 0,
+              totalScoreWaist: 0,
+              totalScoreBodyLower: 0,
+              totalScoreService: 0,
+              hasSuperReview: false,
+            };
+          }
+
+          const score = Number(record.final_score || 0);
+          teacherStats[teacherId].totalScore += score;
+          teacherStats[teacherId].count += 1;
+          teacherStats[teacherId].totalScoreLook += Number(record.score_look || 0);
+          teacherStats[teacherId].totalScoreBreast += Number(record.score_breast || 0);
+          teacherStats[teacherId].totalScoreWaist += Number(record.score_waist || 0);
+          teacherStats[teacherId].totalScoreBodyLower += Number(record.score_body_lower || 0);
+          teacherStats[teacherId].totalScoreService += Number(record.score_service || 0);
+
+          // 判断本条测评是否为超级测评
+          if (Number(record.is_super_soldier_review || 0) === 1) {
+            teacherStats[teacherId].hasSuperReview = true;
+          }
+
+          if (score >= 8.5) {
+            teacherStats[teacherId].goodCount += 1;
+          } else if (score >= 6) {
+            teacherStats[teacherId].mediumCount += 1;
+          } else {
+            teacherStats[teacherId].badCount += 1;
+          }
+
+          if (record.features && Array.isArray(record.features)) {
+            record.features.forEach(feature => {
+              if (!teacherStats[teacherId].features.includes(feature)) {
+                teacherStats[teacherId].features.push(feature);
+              }
+            });
+          }
+        }
+
+        // 转换数组、计算平均分，赋值给原始数据源
+        rawAllData = Object.values(teacherStats).map(stats => ({
+          ...stats,
+          avgScore: stats.totalScore / stats.count,
+          avgScoreLook: stats.totalScoreLook / stats.count,
+          avgScoreBreast: stats.totalScoreBreast / stats.count,
+          avgScoreWaist: stats.totalScoreWaist / stats.count,
+          avgScoreBodyLower: stats.totalScoreBodyLower / stats.count,
+          avgScoreService: stats.totalScoreService / stats.count,
+          // 认证判定：存在超级测评 OR 测评总数大于5
+          isVerified: stats.hasSuperReview || stats.count > 5,
+        }));
+
+        // 缓存仅存储原始未排序数据
+        localStorage.setItem(CACHE_RAW_KEY, JSON.stringify(rawAllData));
+        localStorage.setItem(CACHE_TIME_KEY, now.toString());
+
+        // 原始数据复制一份，执行默认排序作为渲染数组
+        currentData = [...rawAllData].sort(sortCompareFunc);
+        renderTable(currentData);
+
+      } catch (error) {
+        console.error('加载异常', error);
+        // 自动重试一次（仅首次失败重试）
+        if (!hasRetried) {
+          hasRetried = true;
+          tbody.innerHTML = '<tr><td colspan="16" class="loading-text">网络波动，正在自动重试……</td></tr>';
+          setTimeout(loadData, 1200);
+          return;
+        }
+        tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;padding:40px;color:#dc3545;">加载数据失败<br><button class="btn reload-btn" onclick="loadData()">点击重新加载</button></td></tr>`;
+      }
+    }
+
+    // 后台静默刷新远程最新数据（缓存存在时调用）
+    async function remoteRefresh() {
+      try {
+        const response = await fetchWithTimeout(`${API_URL}/api/collections/test_records/records?page=1&perPage=1000&sort=-created_at`);
+        if (!response.ok) return;
+        const result = await response.json();
+        const records = result.items || [];
+        if(records.length === 0) return;
+        const teacherStats = {};
+        for (const record of records) {
+          const teacherId = record.teacher_id;
+          if (!teacherStats[teacherId]) {
+            teacherStats[teacherId] = {
+              teacher_id: teacherId,
+              teacher_name: record.teacher_name,
+              age: record.age,
+              height: record.height,
+              weight: record.weight,
+              price: record.price,
+              bust: record.bust,
+              totalScore: 0,
+              count: 0,
+              goodCount: 0,
+              mediumCount: 0,
+              badCount: 0,
+              features: [],
+              totalScoreLook: 0,
+              totalScoreBreast: 0,
+              totalScoreWaist: 0,
+              totalScoreBodyLower: 0,
+              totalScoreService: 0,
+              hasSuperReview: false,
+            };
+          }
+          const score = Number(record.final_score || 0);
+          teacherStats[teacherId].totalScore += score;
+          teacherStats[teacherId].count += 1;
+          teacherStats[teacherId].totalScoreLook += Number(record.score_look || 0);
+          teacherStats[teacherId].totalScoreBreast += Number(record.score_breast || 0);
+          teacherStats[teacherId].totalScoreWaist += Number(record.score_waist || 0);
+          teacherStats[teacherId].totalScoreBodyLower += Number(record.score_body_lower || 0);
+          teacherStats[teacherId].totalScoreService += Number(record.score_service || 0);
+          // 超级测评标记
+          if (Number(record.is_super_soldier_review || 0) === 1) {
+            teacherStats[teacherId].hasSuperReview = true;
+          }
+          if (score >= 8.5) teacherStats[teacherId].goodCount +=1;
+          else if(score>=6) teacherStats[teacherId].mediumCount +=1;
+          else teacherStats[teacherId].badCount +=1;
+          if(record.features && Array.isArray(record.features)){
+            record.features.forEach(f=>{
+              if(!teacherStats[teacherId].features.includes(f)) teacherStats[teacherId].features.push(f);
+            })
+          }
+        }
+        const newRaw = Object.values(teacherStats).map(stats => ({
+          ...stats,
+          avgScore: stats.totalScore / stats.count,
+          avgScoreLook: stats.totalScoreLook / stats.count,
+          avgScoreBreast: stats.totalScoreBreast / stats.count,
+          avgScoreWaist: stats.totalScoreWaist / stats.count,
+          avgScoreBodyLower: stats.totalScoreBodyLower / stats.count,
+          avgScoreService: stats.totalScoreService / stats.count,
+          isVerified: stats.hasSuperReview || stats.count > 5,
+        }));
+        // 更新缓存原始数据
+        rawAllData = newRaw;
+        localStorage.setItem(CACHE_RAW_KEY, JSON.stringify(rawAllData));
+        localStorage.setItem(CACHE_TIME_KEY, Date.now().toString());
+        // 重新排序渲染
+        currentData = [...rawAllData].sort(sortCompareFunc);
+        renderTable(currentData);
+      }catch(e){}
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = '';
+      
+      data.forEach((teacher) => {
+        const row = document.createElement('tr');
+        
+        row.innerHTML = `
+          <td class="${teacher.avgScore >= 8.5 ? 'score-high' : teacher.avgScore >= 6 ? 'score-medium' : 'score-low'}"><strong>${teacher.avgScore.toFixed(2)}</strong></td>
+          <td><strong>${teacher.teacher_name}</strong></td>
+          <td class="score-high">${teacher.goodCount}</td>
+          <td class="score-medium">${teacher.mediumCount}</td>
+          <td class="score-low">${teacher.badCount}</td>
+          <td style="font-family: monospace; font-size: 12px;">${teacher.teacher_id}</td>
+          <td>${teacher.age}</td>
+          <td>${teacher.height}cm</td>
+          <td>${teacher.weight}kg</td>
+          <td>${teacher.price}档</td>
+          <td>${teacher.bust}</td>
+          <td>${teacher.avgScoreLook.toFixed(1)}</td>
+          <td>${teacher.avgScoreBreast.toFixed(1)}</td>
+          <td>${teacher.avgScoreWaist.toFixed(1)}</td>
+          <td>${teacher.avgScoreBodyLower.toFixed(1)}</td>
+          <td>${teacher.avgScoreService.toFixed(1)}</td>
+        `;
+        
+        tbody.appendChild(row);
+      });
+      
+      document.getElementById('totalCount').textContent = data.length;
+      // 统计已认证人数：isVerified=true 的老师数量
+      document.getElementById('verifiedCount').textContent = data.filter(t => t.isVerified).length;
+    }
+
+    // ========== 核心筛选逻辑（Excel风格） ==========
+    function applyFilters() {
+      // 第一步：永远从原始数据复制，执行全局排序
+      let sortedBase = [...rawAllData].sort(sortCompareFunc);
+      let filtered = [...sortedBase];
+      
+      // 1. 全局搜索：姓名、ID、胸围bust、单价price全部模糊匹配
+      if (globalSearchTerm) {
+        const term = globalSearchTerm.toLowerCase();
+        filtered = filtered.filter(t =>
+          t.teacher_name.toLowerCase().includes(term) ||
+          t.teacher_id.toLowerCase().includes(term) ||
+          String(t.bust).toLowerCase().includes(term) ||
+          String(t.price).toLowerCase().includes(term)
+        );
+      }
+
+      // 2. 列筛选：遍历所有筛选条件
+      Object.keys(filters).forEach(field => {
+        const filterValue = filters[field];
+        if (!filterValue) return;
+
+        filtered = filtered.filter(t => {
+          const value = t[field];
+          // 数字区间匹配（如 3-10）
+          if (typeof value === 'number') {
+            const numFilter = parseFloat(filterValue);
+            if (!isNaN(numFilter)) {
+              if (filterValue.includes('-')) {
+                const parts = filterValue.split('-').map(p => parseFloat(p.trim()));
+                if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+                  return value >= parts[0] && value <= parts[1];
+                }
+              }
+              return value === numFilter;
+            }
+          }
+          // 文本模糊匹配
+          return String(value).toLowerCase().includes(filterValue.toLowerCase());
+        });
+      });
+
+      currentData = filtered;
+      renderTable(filtered);
+      // 更新筛选按钮激活状态
+      updateFilterButtonState();
+    }
+
+    // 切换筛选面板显示/隐藏
+    function toggleFilterPanel(field) {
+      // 先关闭所有其他筛选面板
+      document.querySelectorAll('.filter-panel').forEach(panel => {
+        if (panel.id !== `filter-panel-${field}`) {
+          panel.classList.remove('show');
+        }
+      });
+      // 切换当前面板
+      const panel = document.getElementById(`filter-panel-${field}`);
+      panel.classList.toggle('show');
+    }
+
+    // 应用列筛选
+    function applyColumnFilter(field) {
+      const panel = document.getElementById(`filter-panel-${field}`);
+      const input = panel.querySelector('input');
+      const value = input.value.trim();
+      
+      if (value) {
+        filters[field] = value;
+      } else {
+        delete filters[field];
+      }
+      
+      applyFilters();
+      panel.classList.remove('show');
+    }
+
+    // 清除单列筛选
+    function clearFilter(field) {
+      delete filters[field];
+      const panel = document.getElementById(`filter-panel-${field}`);
+      const input = panel.querySelector('input');
+      input.value = '';
+      
+      applyFilters();
+      panel.classList.remove('show');
+    }
+
+    // 更新筛选按钮激活状态（有筛选条件时高亮）
+    function updateFilterButtonState() {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      Object.keys(filters).forEach(field => {
+        const btn = document.querySelector(`[data-field="${field}"] .filter-btn`);
+        if (btn) btn.classList.add('active');
+      });
+    }
+
+    // 排序功能（完全保留原有逻辑）
+    function sortTable(field) {
+      if (sortField === field) {
+        sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        sortField = field;
+        sortDirection = 'desc';
+      }
+
+      document.querySelectorAll('.th-label').forEach(label => {
+        label.classList.remove('sort-active');
+        const icon = label.querySelector('.sort-icon');
+        if (icon) icon.textContent = '↕';
+      });
+
+      const activeLabels = document.querySelectorAll(`.th-label[onclick="sortTable('${field}')"]`);
+      activeLabels.forEach(label => {
+        label.classList.add('sort-active');
+        const icon = label.querySelector('.sort-icon');
+        if (icon) icon.textContent = sortDirection === 'asc' ? '↑' : '↓';
+      });
+
+      applyFilters();
+    }
+
+    // 清除全部筛选（全局搜索+所有列筛选）
+    function clearAllFilters() {
+      filters = {};
+      globalSearchTerm = '';
+      
+      document.querySelectorAll('.filter-input-top').forEach(input => {
+        input.value = '';
+      });
+      document.getElementById('globalSearch').value = '';
+      
+      applyFilters();
+    }
+
+    // 绑定全局搜索事件
+    document.getElementById('globalSearch').addEventListener('input', function(e) {
+      globalSearchTerm = e.target.value.trim();
+      applyFilters();
+    });
+
+    // 点击外部关闭筛选面板
+    document.addEventListener('click', function(e) {
+      if (!e.target.closest('.th-content') && !e.target.closest('.filter-panel')) {
+        document.querySelectorAll('.filter-panel').forEach(panel => {
+          panel.classList.remove('show');
+        });
+      }
+    });
+
+    // 页面加载完成初始化
+    document.addEventListener('DOMContentLoaded', ()=>{
+      loadData();
+    });
+
+    // 浏览器后退缓存页面强制重排
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted && rawAllData.length > 0) {
+        currentData = [...rawAllData].sort(sortCompareFunc);
+        applyFilters();
+      }
+    })
+  </script>
 </body>
 </html>

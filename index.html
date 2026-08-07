@@ -692,9 +692,8 @@
 
             return `【老师测评报告】
 
-━━━━━━━━━━━━━
-
-📋 基本信息
+━━━━━━━
+基本信息
 · 老师ID：${teacherId}
 · 老师姓名：${teacherName}
 · 年龄：${age}岁
@@ -702,33 +701,24 @@
 · 体重：${weight}kg
 · 单价：${price}
 · 胸围：${bust}
-
-🏷️ 特色标签：${state.features.join('、') || '无'}
-
-📊 基础评分：
-· 颜值：${state.scores.look}/5
-· 胸型：${state.scores.breast}/5
-· 身材：${state.scores.figure}/5
-· 服务：${state.scores.service}/5
-
-➕ 附加项：
+特色标签：${state.features.join('、') || '无'}
+基础评分：
+· 颜值：${state.scores.look}
+· 胸型：${state.scores.breast}
+· 身材：${state.scores.figure}
+· 服务：${state.scores.service}
+附加项：
 · 胸型质感：${maps.breastNature[state.options.breastNature]}
 · 皮肤状态：${maps.skin[state.options.skin]}
 · 声音条件：${maps.voice[state.options.voice]}
 · 纹身情况：${maps.tattoo[state.options.tattoo]}
 · 腰腹状态：${maps.waist[state.options.waist]}
-
-⚠️ 不足之处：${shortcoming || '无'}
-
+🎯 最终得分：${final.toFixed(2)}分
+⚠️不足之处：${shortcoming || '无'}
 📝 详细描述：
 ${description}
-
-━━━━━━━━━━━━━
-
-🎯 最终得分：${final.toFixed(2)}分
-
-测评人：${state.nickname}
-测评时间：${new Date().toLocaleString('zh-CN')}`;
+━━━━━━━
+测评人：${state.nickname}`;
         }
 
         // API 提交数据

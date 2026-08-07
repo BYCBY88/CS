@@ -780,7 +780,7 @@
           return;
         }
 
-        // 后端已经算好全部汇总字段，直接赋值给rawAllData
+        // =========修复：读取后端下划线原始字段，映射前端驼峰变量=========
         rawAllData = records.map(r=>({
           teacher_id: r.teacher_id,
           teacher_name: r.teacher_name,
@@ -790,15 +790,15 @@
           weight: r.weight,
           price: r.price,
           bust: r.bust,
-          goodCount: r.goodCount,
-          mediumCount: r.mediumCount,
-          badCount: r.badCount,
-          avgScore: Number(r.avgScore||0),
-          avgScoreLook: Number(r.avgScoreLook||0),
-          avgScoreBreast: Number(r.avgScoreBreast||0),
-          avgScoreWaist: Number(r.avgScoreWaist||0),
-          avgScoreBodyLower: Number(r.avgScoreBodyLower||0),
-          avgScoreService: Number(r.avgScoreService||0),
+          goodCount: r.good_count,
+          mediumCount: r.medium_count,
+          badCount: r.bad_count,
+          avgScore: Number(r.avg_score||0),
+          avgScoreLook: Number(r.avg_score_look||0),
+          avgScoreBreast: Number(r.avg_score_breast||0),
+          avgScoreWaist: Number(r.avg_score_waist||0),
+          avgScoreBodyLower: Number(r.avg_score_body_lower||0),
+          avgScoreService: Number(r.avg_score_service||0),
         }));
 
         localStorage.setItem(CACHE_RAW_KEY, JSON.stringify(rawAllData));
@@ -828,6 +828,7 @@
         const records = result.items || [];
         if(records.length === 0) return;
 
+        // =========修复：读取后端下划线原始字段=========
         const newRaw = records.map(r=>({
           teacher_id: r.teacher_id,
           teacher_name: r.teacher_name,
@@ -837,15 +838,15 @@
           weight: r.weight,
           price: r.price,
           bust: r.bust,
-          goodCount: r.goodCount,
-          mediumCount: r.mediumCount,
-          badCount: r.badCount,
-          avgScore: Number(r.avgScore||0),
-          avgScoreLook: Number(r.avgScoreLook||0),
-          avgScoreBreast: Number(r.avgScoreBreast||0),
-          avgScoreWaist: Number(r.avgScoreWaist||0),
-          avgScoreBodyLower: Number(r.avgScoreBodyLower||0),
-          avgScoreService: Number(r.avgScoreService||0),
+          goodCount: r.good_count,
+          mediumCount: r.medium_count,
+          badCount: r.bad_count,
+          avgScore: Number(r.avg_score||0),
+          avgScoreLook: Number(r.avg_score_look||0),
+          avgScoreBreast: Number(r.avg_score_breast||0),
+          avgScoreWaist: Number(r.avg_score_waist||0),
+          avgScoreBodyLower: Number(r.avg_score_body_lower||0),
+          avgScoreService: Number(r.avg_score_service||0),
         }));
 
         rawAllData = newRaw;

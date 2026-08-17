@@ -58,8 +58,26 @@
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
         }
+        .form-row-2 {
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap:15px;
+        }
+        .form-row-3 {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap:12px;
+        }
         @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
+            .form-grid { display:none; }
+            .form-row-2 { grid-template-columns: repeat(2,1fr); }
+            .form-row-3 { grid-template-columns: repeat(3,1fr); }
+        }
+        .pc-form { display: grid; grid-template-columns: 1fr 1fr; gap:15px; }
+        .mobile-form { display:none; }
+        @media (max-width:600px){
+            .pc-form { display:none; }
+            .mobile-form { display:block; }
         }
         .form-group { margin-bottom: 15px; }
         .form-group label {
@@ -291,7 +309,8 @@
             <!-- 基本信息 -->
             <div class="card">
                 <div class="card-title">📋 基本信息</div>
-                <div class="form-grid">
+                <!-- PC端布局 -->
+                <div class="pc-form">
                     <div class="form-group">
                         <label>老师ID <span class="required">*</span></label>
                         <input type="text" id="teacherId" placeholder="如@s204386" required autocomplete="off">
@@ -331,6 +350,55 @@
                             <option value="E">E</option>
                             <option value="F">F</option>
                         </select>
+                    </div>
+                </div>
+                <!-- 手机端布局 -->
+                <div class="mobile-form">
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>老师ID <span class="required">*</span></label>
+                            <input type="text" id="teacherIdMobile" placeholder="如@s204386" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>老师姓名 <span class="required">*</span></label>
+                            <input type="text" id="teacherNameMobile" placeholder="输入姓名" required autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="form-row-2">
+                        <div class="form-group">
+                            <label>单价 <span class="required">*</span></label>
+                            <input type="number" id="priceMobile" min="3" max="10" placeholder="3-10" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>胸围 <span class="required">*</span></label>
+                            <select id="bustMobile" required>
+                                <option value="">请选择</option>
+                                <option value="A-">A-</option>
+                                <option value="A">A</option>
+                                <option value="A+">A+</option>
+                                <option value="B-">B-</option>
+                                <option value="B">B</option>
+                                <option value="B+">B+</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row-3">
+                        <div class="form-group">
+                            <label>年龄 <span class="required">*</span></label>
+                            <input type="number" id="ageMobile" min="18" max="60" placeholder="18‑60" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>身高(cm) <span class="required">*</span></label>
+                            <input type="number" id="heightMobile" min="140" max="200" placeholder="140‑200" required autocomplete="off">
+                        </div>
+                        <div class="form-group">
+                            <label>体重(kg) <span class="required">*</span></label>
+                            <input type="number" id="weightMobile" min="40" max="80" step="0.1" placeholder="40‑80" required autocomplete="off">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -516,7 +584,25 @@
             });
 
             document.getElementById('shortcoming').addEventListener('input', updateSummary);
-            document.getElementById('bust').addEventListener('change', updateSummary);
+
+            // 手机端与PC双向同步
+            const syncList = [
+                ['teacherId','teacherIdMobile'],
+                ['teacherName','teacherNameMobile'],
+                ['age','ageMobile'],
+                ['price','priceMobile'],
+                ['height','heightMobile'],
+                ['weight','weightMobile'],
+                ['bust','bustMobile']
+            ];
+            syncList.forEach(([pcId,mId])=>{
+                const pcEl = document.getElementById(pcId);
+                const mEl = document.getElementById(mId);
+                pcEl.addEventListener('input',()=>{ mEl.value = pcEl.value; });
+                mEl.addEventListener('input',()=>{ pcEl.value = mEl.value; });
+                if(pcEl.tagName==='SELECT') pcEl.addEventListener('change',()=>{ mEl.value = pcEl.value; });
+                if(mEl.tagName==='SELECT') mEl.addEventListener('change',()=>{ pcEl.value = mEl.value; });
+            });
         });
 
         // 昵称管理
@@ -654,7 +740,12 @@
             const bust = document.getElementById('bust').value;
             const shortcoming = document.getElementById('shortcoming').value;
             const description = document.getElementById('description').value;
-            const { final } = calculateScore();
+            const { final, look10, breast10, figure10, service10 } = calculateScore();
+
+            const lookDesc = document.getElementById('lookDesc').textContent;
+            const breastDesc = document.getElementById('breastDesc').textContent;
+            const figureDesc = document.getElementById('figureDesc').textContent;
+            const serviceDesc = document.getElementById('serviceDesc').textContent;
 
             const maps = {
                 breastNature: { soft: '柔软', normal: '正常', hard: '偏硬', null: '未选择' },
@@ -663,8 +754,6 @@
                 tattoo: { light: '无纹身', small: '小面积', heavy: '大面积', null: '未选择' },
                 waist: { tight: '紧致', flat: '平坦', belly: '小肚子', null: '未选择' }
             };
-
-            const { look10, breast10, figure10, service10 } = calculateScore();
 
             return `【老师测评报告】
 
@@ -678,10 +767,10 @@
 · 单价：${price}
 · 胸围：${bust}
 📊 基础评分（10分制）：
-· 颜值：${look10}/10
-· 胸型：${breast10}/10
-· 身材：${figure10}/10
-· 服务：${service10}/10
+· 颜值：${look10}/10 【${lookDesc}】
+· 胸型：${breast10}/10 【${breastDesc}】
+· 身材：${figure10}/10 【${figureDesc}】
+· 服务：${service10}/10 【${serviceDesc}】
 ➕ 附加项：
 · 胸型质感：${maps.breastNature[state.options.breastNature]}
 · 皮肤状态：${maps.skin[state.options.skin]}

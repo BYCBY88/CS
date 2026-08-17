@@ -748,7 +748,7 @@
             const serviceDesc = document.getElementById('serviceDesc').textContent;
 
             const maps = {
-                breastNature: { soft: '柔软', normal: '正常', hard: '偏硬', null: '未选择' },
+                breastNature: { soft: '天然柔软', normal: '轻微科技', hard: '全科技胸', null: '未选择' },
                 skin: { smooth: '光滑细腻', normal: '正常', rough: '粗糙暗沉', null: '未选择' },
                 voice: { pleasant: '悦耳动听', normal: '正常', bad: '难听刺耳', null: '未选择' },
                 tattoo: { light: '无纹身', small: '小面积', heavy: '大面积', null: '未选择' },
@@ -758,7 +758,7 @@
             return `【老师测评报告】
 
 ━━━━━━━━━━━━━
-📋 基本信息
+基本信息
 · 老师ID：${teacherId}
 · 老师姓名：${teacherName}
 · 年龄：${age}岁
@@ -766,26 +766,25 @@
 · 体重：${weight}kg
 · 单价：${price}
 · 胸围：${bust}
-📊 基础评分（10分制）：
+基础评分（10分制）：
 · 颜值：${look10}/10 【${lookDesc}】
 · 胸型：${breast10}/10 【${breastDesc}】
 · 身材：${figure10}/10 【${figureDesc}】
 · 服务：${service10}/10 【${serviceDesc}】
-➕ 附加项：
+附加项：
 · 胸型质感：${maps.breastNature[state.options.breastNature]}
 · 皮肤状态：${maps.skin[state.options.skin]}
 · 声音条件：${maps.voice[state.options.voice]}
 · 纹身情况：${maps.tattoo[state.options.tattoo]}
 · 腰腹状态：${maps.waist[state.options.waist]}
-🎯 最终得分：${final.toFixed(2)}分
+最终得分：${final.toFixed(2)}分
 
-⚠️ 不足之处：${shortcoming || '无'}
-
-📝 详细描述：
+不足之处：
+${shortcoming || '无'}
+详细描述：
 ${description}
 ━━━━━━━━━━━━━
-测评人：${state.nickname}
-测评时间：${new Date().toLocaleString('zh-CN')}`;
+测评人：${state.nickname}`;
         }
 
         // API 提交数据（对接新单表teacher_evaluations）

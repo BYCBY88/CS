@@ -325,11 +325,13 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="header-center" style="line-height:48px;">
-                <a style="font-size:14px;margin-right:12px;text-decoration:none;" href="https://bycby88.github.io/mi/" target="_blank">老师明细</a>
-                <span style="font-size:14px">测评人：<strong id="nickname-display">用户</strong></span>
-                <button style="font-size:13px;margin-left:8px;" onclick="showNicknameModal()">修改</button>
+            <div class="header-center">
+                <div class="user-info">
+                    <span>测评人：<strong id="nickname-display">用户</strong></span>
+                    <button onclick="showNicknameModal()">修改</button>
+                </div>
             </div>
+            <a class="header-right-btn" href="https://bycby88.github.io/mi/" target="_blank">老师明细</a>
         </div>
 
         <!-- 表单 -->

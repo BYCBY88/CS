@@ -159,28 +159,6 @@
             border-color: #ff6b6b;
             background: #ff6b6b;
         }
-        .feature-tags {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-        .feature-tag {
-            padding: 10px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            cursor: pointer;
-            text-align: center;
-            font-size: 13px;
-            transition: all 0.3s;
-        }
-        .feature-tag:hover { border-color: #667eea; }
-        .feature-tag.active {
-            border-color: #667eea;
-            background: #e8eaff;
-            color: #667eea;
-            font-weight: 500;
-        }
         .summary {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -357,19 +335,6 @@
                 </div>
             </div>
 
-            <!-- 特色标签 -->
-            <div class="card">
-                <div class="card-title">🏷️ 特色标签</div>
-                <div class="feature-tags">
-                    <div class="feature-tag" data-value="COS" onclick="toggleFeature(this)">COS</div>
-                    <div class="feature-tag" data-value="户外" onclick="toggleFeature(this)">户外</div>
-                    <div class="feature-tag" data-value="6+9" onclick="toggleFeature(this)">6+9</div>
-                    <div class="feature-tag" data-value="性感" onclick="toggleFeature(this)">性感</div>
-                    <div class="feature-tag" data-value="专业" onclick="toggleFeature(this)">专业</div>
-                    <div class="feature-tag" data-value="扮演" onclick="toggleFeature(this)">扮演</div>
-                </div>
-            </div>
-
             <!-- 基础评分 -->
             <div class="card">
                 <div class="card-title">📊 基础评分（每项权重25%）</div>
@@ -380,7 +345,7 @@
                         <span class="score-value" id="lookValue">6分</span>
                     </div>
                     <input type="range" id="look" min="1" max="5" step="0.5" value="3" oninput="updateScore('look', this.value)">
-                    <div class="score-desc" id="lookDesc">颜值良好，整体协调</div>
+                    <div class="score-desc" id="lookDesc">大众脸，不丑不美</div>
                 </div>
 
                 <div class="score-item">
@@ -398,7 +363,7 @@
                         <span class="score-value" id="figureValue">6分</span>
                     </div>
                     <input type="range" id="figure" min="1" max="5" step="0.5" value="3" oninput="updateScore('figure', this.value)">
-                    <div class="score-desc" id="figureDesc">身材良好，比例协调</div>
+                    <div class="score-desc" id="figureDesc">不胖不瘦，正常身材</div>
                 </div>
 
                 <div class="score-item">
@@ -407,7 +372,7 @@
                         <span class="score-value" id="serviceValue">6分</span>
                     </div>
                     <input type="range" id="service" min="1" max="5" step="0.5" value="3" oninput="updateScore('service', this.value)">
-                    <div class="score-desc" id="serviceDesc">服务良好，态度积极</div>
+                    <div class="score-desc" id="serviceDesc">稍有服务，态度积极</div>
                 </div>
 
                 <!-- 汇总 -->
@@ -433,7 +398,7 @@
                     <label>胸型质感</label>
                     <div class="option-buttons">
                         <div class="option-btn" data-group="breastNature" data-value="soft" onclick="selectOption(this)">柔软</div>
-                        <div class="option-btn active" data-group="breastNature" data-value="normal" onclick="selectOption(this)">正常</div>
+                        <div class="option-btn" data-group="breastNature" data-value="normal" onclick="selectOption(this)">正常</div>
                         <div class="option-btn" data-group="breastNature" data-value="hard" onclick="selectOption(this)">偏硬</div>
                     </div>
                 </div>
@@ -442,7 +407,7 @@
                     <label>皮肤状态</label>
                     <div class="option-buttons">
                         <div class="option-btn" data-group="skin" data-value="smooth" onclick="selectOption(this)">光滑细腻</div>
-                        <div class="option-btn active" data-group="skin" data-value="normal" onclick="selectOption(this)">正常</div>
+                        <div class="option-btn" data-group="skin" data-value="normal" onclick="selectOption(this)">正常</div>
                         <div class="option-btn" data-group="skin" data-value="rough" onclick="selectOption(this)">粗糙暗沉</div>
                     </div>
                 </div>
@@ -451,7 +416,7 @@
                     <label>声音条件</label>
                     <div class="option-buttons">
                         <div class="option-btn" data-group="voice" data-value="pleasant" onclick="selectOption(this)">悦耳动听</div>
-                        <div class="option-btn active" data-group="voice" data-value="normal" onclick="selectOption(this)">正常</div>
+                        <div class="option-btn" data-group="voice" data-value="normal" onclick="selectOption(this)">正常</div>
                         <div class="option-btn" data-group="voice" data-value="bad" onclick="selectOption(this)">难听刺耳</div>
                     </div>
                 </div>
@@ -459,7 +424,7 @@
                 <div class="option-group">
                     <label>纹身情况</label>
                     <div class="option-buttons">
-                        <div class="option-btn active" data-group="tattoo" data-value="light" onclick="selectOption(this)">无纹身</div>
+                        <div class="option-btn" data-group="tattoo" data-value="light" onclick="selectOption(this)">无纹身</div>
                         <div class="option-btn" data-group="tattoo" data-value="small" onclick="selectOption(this)">小面积</div>
                         <div class="option-btn" data-group="tattoo" data-value="heavy" onclick="selectOption(this)">大面积</div>
                     </div>
@@ -469,7 +434,7 @@
                     <label>腰腹状态</label>
                     <div class="option-buttons">
                         <div class="option-btn" data-group="waist" data-value="tight" onclick="selectOption(this)">紧致</div>
-                        <div class="option-btn active" data-group="waist" data-value="flat" onclick="selectOption(this)">平坦</div>
+                        <div class="option-btn" data-group="waist" data-value="flat" onclick="selectOption(this)">平坦</div>
                         <div class="option-btn" data-group="waist" data-value="belly" onclick="selectOption(this)">小肚子</div>
                     </div>
                 </div>
@@ -519,18 +484,17 @@
         </div>
     </div>
 
-    <script>
+<script>
         // 状态管理
         const state = {
             nickname: '',
-            features: [],
             scores: { look: 3, breast: 3, figure: 3, service: 3 },
             options: {
-                breastNature: 'normal',
-                skin: 'normal',
-                voice: 'normal',
-                tattoo: 'light',
-                waist: 'flat'
+                breastNature: null,
+                skin: null,
+                voice: null,
+                tattoo: null,
+                waist: null
             }
         };
 
@@ -587,18 +551,6 @@
             }
         }
 
-        // 特色标签
-        function toggleFeature(el) {
-            const value = el.dataset.value;
-            if (el.classList.contains('active')) {
-                el.classList.remove('active');
-                state.features = state.features.filter(f => f !== value);
-            } else {
-                el.classList.add('active');
-                state.features.push(value);
-            }
-        }
-
         // 评分更新
         function updateScore(type, value) {
             state.scores[type] = parseFloat(value);
@@ -629,11 +581,33 @@
             updateSummary();
         }
 
+        // 附加项前端校验：5项必须全部选中
+        function validateExtraOptions(){
+            const requiredExtra = [
+                { key: 'breastNature', label: '胸型质感' },
+                { key: 'skin', label: '皮肤状态' },
+                { key: 'voice', label: '声音条件' },
+                { key: 'tattoo', label: '纹身情况' },
+                { key: 'waist', label: '腰腹状态' }
+            ];
+            for(const item of requiredExtra){
+                if(!state.options[item.key]){
+                    showToast(`请选择【${item.label}】`, 'error');
+                    return false;
+                }
+            }
+            return true;
+        }
+
         // 计算分数
         function calculateScore() {
-            // 基础分：每项5分制先转为10分制，再求平均
-            // (颜值*2 + 胸型*2 + 身材*2 + 服务*2) / 4 = (颜值+胸型+身材+服务) * 0.5
-            const base = (state.scores.look + state.scores.breast + state.scores.figure + state.scores.service) * 0.5;
+            // 基础分：slider是1-5分，显示时×2转为10分制
+            // 计算时直接用10分制的值求平均
+            const look10 = state.scores.look * 2;
+            const breast10 = state.scores.breast * 2;
+            const figure10 = state.scores.figure * 2;
+            const service10 = state.scores.service * 2;
+            const base = (look10 + breast10 + figure10 + service10) / 4;
 
             let extra = 0;
             if (state.options.breastNature === 'soft') extra += 0.2;
@@ -658,7 +632,7 @@
             if (state.options.waist === 'belly') extra -= 0.2;
 
             const final = Math.max(0, base + extra);
-            return { base, extra, final };
+            return { base, extra, final, look10, breast10, figure10, service10 };
         }
 
 
@@ -683,17 +657,19 @@
             const { final } = calculateScore();
 
             const maps = {
-                breastNature: { soft: '柔软(+0.2)', normal: '正常(±0)', hard: '偏硬(-0.2)' },
-                skin: { smooth: '光滑细腻(+0.2)', normal: '正常(±0)', rough: '粗糙暗沉(-0.2)' },
-                voice: { pleasant: '悦耳动听(+0.2)', normal: '正常(±0)', bad: '难听刺耳(-0.2)' },
-                tattoo: { light: '无纹身(+0.2)', small: '小面积(±0)', heavy: '大面积(-0.2)' },
-                waist: { tight: '紧致(+0.2)', flat: '平坦(±0)', belly: '小肚子(-0.2)' }
+                breastNature: { soft: '柔软', normal: '正常', hard: '偏硬', null: '未选择' },
+                skin: { smooth: '光滑细腻', normal: '正常', rough: '粗糙暗沉', null: '未选择' },
+                voice: { pleasant: '悦耳动听', normal: '正常', bad: '难听刺耳', null: '未选择' },
+                tattoo: { light: '无纹身', small: '小面积', heavy: '大面积', null: '未选择' },
+                waist: { tight: '紧致', flat: '平坦', belly: '小肚子', null: '未选择' }
             };
+
+            const { look10, breast10, figure10, service10 } = calculateScore();
 
             return `【老师测评报告】
 
-━━━━━━━
-基本信息
+━━━━━━━━━━━━━
+📋 基本信息
 · 老师ID：${teacherId}
 · 老师姓名：${teacherName}
 · 年龄：${age}岁
@@ -701,37 +677,34 @@
 · 体重：${weight}kg
 · 单价：${price}
 · 胸围：${bust}
-特色标签：${state.features.join('、') || '无'}
-基础评分：
-· 颜值：${state.scores.look}
-· 胸型：${state.scores.breast}
-· 身材：${state.scores.figure}
-· 服务：${state.scores.service}
-附加项：
+📊 基础评分（10分制）：
+· 颜值：${look10}/10
+· 胸型：${breast10}/10
+· 身材：${figure10}/10
+· 服务：${service10}/10
+➕ 附加项：
 · 胸型质感：${maps.breastNature[state.options.breastNature]}
 · 皮肤状态：${maps.skin[state.options.skin]}
 · 声音条件：${maps.voice[state.options.voice]}
 · 纹身情况：${maps.tattoo[state.options.tattoo]}
 · 腰腹状态：${maps.waist[state.options.waist]}
 🎯 最终得分：${final.toFixed(2)}分
-⚠️不足之处：${shortcoming || '无'}
+
+⚠️ 不足之处：${shortcoming || '无'}
+
 📝 详细描述：
 ${description}
-━━━━━━━
-测评人：${state.nickname}`;
+━━━━━━━━━━━━━
+测评人：${state.nickname}
+测评时间：${new Date().toLocaleString('zh-CN')}`;
         }
 
-        // API 提交数据
+        // API 提交数据（对接新单表teacher_evaluations）
         async function submitToAPI() {
-            const API_URL = 'https://super-soldier-api.bycby88.workers.dev/api/collections/test_records/records';
+            const API_URL = 'https://cp.byg88.biz/api/collections/teacher_evaluations/records';
 
             const bust = document.getElementById('bust').value;
-            const { final } = calculateScore();
-
-            // 计算评级：8分以上好评，6-8分中评，6分以下差评
-            let rating = '差评';
-            if (final >= 8.0) rating = '好评';
-            else if (final >= 6.0) rating = '中评';
+            const { final, look10, breast10, figure10, service10 } = calculateScore();
 
             const requestBody = {
                 evaluator: state.nickname,
@@ -739,22 +712,24 @@ ${description}
                 teacher_name: document.getElementById('teacherName').value,
                 age: document.getElementById('age').value ? parseInt(document.getElementById('age').value) : null,
                 height: document.getElementById('height').value ? parseInt(document.getElementById('height').value) : null,
-                weight: document.getElementById('weight').value ? parseInt(document.getElementById('weight').value) : null,
+                weight: document.getElementById('weight').value ? parseFloat(document.getElementById('weight').value) : null,
                 price: document.getElementById('price').value ? parseInt(document.getElementById('price').value) : null,
                 bust: bust || null,
-                breast_nature: state.options.breastNature || 'normal',
-                skin: state.options.skin || 'normal',
-                voice: state.options.voice || 'normal',
-                tattoo: state.options.tattoo || 'light',
-                score_look: state.scores.look * 2,  // 转为10分制
-                score_breast: state.scores.breast * 2,
-                score_figure: state.scores.figure * 2,
-                score_service: state.scores.service * 2,
+
+                score_look: look10,
+                score_breast: breast10,
+                score_figure: figure10,
+                score_service: service10,
                 final_score: final,
-                rating: rating,
-                shortcoming: document.getElementById('shortcoming').value || null,
-                description: document.getElementById('description').value || null,
-                is_super_soldier_review: false
+
+                breast_nature: state.options.breastNature,
+                skin: state.options.skin,
+                voice: state.options.voice,
+                tattoo: state.options.tattoo,
+                waist: state.options.waist,
+
+                shortcoming: document.getElementById('shortcoming').value.trim() || null,
+                description: document.getElementById('description').value.trim()
             };
 
             try {
@@ -764,14 +739,17 @@ ${description}
                     body: JSON.stringify(requestBody)
                 });
 
+                const resJson = await response.json();
                 if (!response.ok) {
-                    console.error('API 提交失败:', response.status);
+                    showToast(resJson.error || '提交失败', 'error');
+                    console.error('API 提交失败:', resJson);
                     return false;
                 }
-
-                console.log('API 提交成功');
+                showToast('数据已提交服务器','success');
+                console.log('API 提交成功',resJson);
                 return true;
             } catch (err) {
+                showToast('网络异常，提交失败','error');
                 console.error('API 提交错误:', err);
                 return false;
             }
@@ -780,6 +758,11 @@ ${description}
         // 提交处理
         async function handleSubmit(e) {
             e.preventDefault();
+
+            // 前端校验附加项，不满足直接返回
+            if(!validateExtraOptions()){
+                return;
+            }
 
             const report = generateReport();
 
@@ -790,29 +773,18 @@ ${description}
                 showToast('复制失败，请手动复制', 'error');
             }
 
-            // 异步提交到 API，不阻塞用户
-            submitToAPI().then(success => {
-                if (success) {
-                    console.log('数据已同步到服务器');
-                } else {
-                    console.log('数据同步失败，仅本地保存');
-                }
-            });
+            // 异步提交到 API
+            submitToAPI();
 
             document.getElementById('successModal').classList.remove('hidden');
             
             // 重置表单
             document.getElementById('testForm').reset();
-            state.features = [];
             state.scores = { look: 3, breast: 3, figure: 3, service: 3 };
-            state.options = { breastNature: 'normal', skin: 'normal', voice: 'normal', tattoo: 'light', waist: 'flat' };
+            state.options = { breastNature: null, skin: null, voice: null, tattoo: null, waist: null };
             
-            document.querySelectorAll('.feature-tag').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.option-btn').forEach(el => {
                 el.classList.remove('active', 'positive', 'negative');
-                if (el.dataset.value === 'normal' || el.dataset.value === 'flat' || el.dataset.value === 'light') {
-                    el.classList.add('active');
-                }
             });
             
             ['look', 'breast', 'figure', 'service'].forEach(type => {
@@ -846,6 +818,6 @@ ${description}
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
-    </script>
+</script>
 </body>
 </html>
